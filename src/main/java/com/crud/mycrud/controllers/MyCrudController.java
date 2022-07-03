@@ -1,6 +1,9 @@
 package com.crud.mycrud.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +26,15 @@ public class MyCrudController {
 	@GetMapping("/")
 	public String getPrincipal() {
 		return "Hello World!";
+	}
+	
+	@GetMapping("/usuarios")
+	public List<Usuario> getUsers() {
+		List<Usuario> users = new ArrayList<>();
+		for(Usuario object : rep.findAll()) {
+			users.add(object);
+		}
+		return users;
 	}
 	
 	@PostMapping("/usuarios")
