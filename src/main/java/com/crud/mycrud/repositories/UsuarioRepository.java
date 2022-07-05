@@ -12,4 +12,7 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long>{
 
 	List<Usuario> findAll();	
 	Usuario findById(long id);
+	List<Usuario> findByOrderByName();
+	List<Usuario> findByNameOrderByIdadeDesc(String name);
+	List<Usuario> findByNameContaining(String term);
 }

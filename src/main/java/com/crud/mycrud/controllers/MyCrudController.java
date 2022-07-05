@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crud.mycrud.models.Usuario;
@@ -35,15 +36,34 @@ public class MyCrudController {
 		return rep.findById(id);
 	}
 	
+	@GetMapping("/usuarios/count")
+	public long count() {
+		return rep.count();
+	}
+	
+	@GetMapping("/usuarios/ordenarNomes")
+	public List<Usuario> getOrderedUsersByName() {
+		return rep.findByOrderByName();
+	}
+	
+	@GetMapping("/usuarios/ordenarNomesPorIdade")
+	public List<Usuario> getByNameAndOrderedByAge(@RequestParam String name) {
+		return rep.findByNameOrderByIdadeDesc(name);
+	}
+	
+	@GetMapping("/usuarios/acharUsuariosCom")
+	public List<Usuario> getByUsersAlike(@RequestParam String term) {
+		return rep.findByNameContaining(term);
+	}
+	
 	@PostMapping("/usuarios")
 	public Usuario postUser(@RequestBody Usuario u) {
 		return rep.save(u);
 	}
 	
 	@DeleteMapping("/usuarios/{id}")
-	public String deleteUser(@PathVariable long id) {
+	public void deleteUser(@PathVariable long id) {
 		rep.deleteById(id);
-		return "Usuário Deletado";
 	}
 	
 	@PutMapping("/usuarios/{id}")
