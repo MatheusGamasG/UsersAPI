@@ -1,9 +1,6 @@
 package com.crud.mycrud.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,17 +27,17 @@ public class MyCrudController {
 	
 	@GetMapping("/usuarios")
 	public List<Usuario> getUsers() {
-		List<Usuario> users = new ArrayList<>();
-		for(Usuario object : rep.findAll()) {
-			users.add(object);
-		}
-		return users;
+		return rep.findAll();
+	}
+	
+	@GetMapping("/usuarios/{id}")
+	public Usuario getUser(@PathVariable long id) {
+		return rep.findById(id);
 	}
 	
 	@PostMapping("/usuarios")
 	public Usuario postUser(@RequestBody Usuario u) {
-		rep.save(u);
-		return u;
+		return rep.save(u);
 	}
 	
 	@DeleteMapping("/usuarios/{id}")
@@ -51,13 +48,12 @@ public class MyCrudController {
 	
 	@PutMapping("/usuarios/{id}")
 	public Usuario updateUser(@PathVariable long id, @RequestBody Usuario u) {
-		return rep.findById(id).map((user) -> {
-			user.setName(u.getName());
-			user.setIdade(u.getIdade());
-			return rep.save(user);
-		}).orElseGet(() -> {
-			u.setId(id);
+		Usuario user = rep.findById(id);
+		if(user == null) {
 			return rep.save(u);
-		});
+		}
+		user.setIdade(u.getIdade());
+		user.setName(u.getName());		
+		return user;
 	}
 }
